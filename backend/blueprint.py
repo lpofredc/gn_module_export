@@ -24,9 +24,9 @@ from flask import (
 from flask_cors import cross_origin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.helpers import is_form_submitted
+from flask_admin import Admin
 
 from pypnusershub.db.models import User
-from pypnnomenclature.admin import admin
 
 from geonature.utils.utilssqlalchemy import (
     json_resp, to_json_resp,
@@ -96,8 +96,16 @@ class ExportView(ModelView):
 
         return super(ExportView, self).validate_form(form)
 
+# create flask admin for export
+admin = Admin(
+  current_app,
+  name="Backoffice d'administration du module export",
+  template_mode='bootstrap3',
+  url='/exports/admin',
+  endpoint='export_module'
+)
 
-# Add views
+# Add views to flask admin
 admin.add_view(ExportView(DB.session))
 admin.add_view(ModelView(CorExportsRoles, DB.session))
 admin.add_view(ModelView(Licences, DB.session))
